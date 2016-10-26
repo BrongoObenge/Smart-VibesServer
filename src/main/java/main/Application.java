@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.flyway.FlywayDataSource;
  * Created by j on 10/26/16.
  */
 @SpringBootApplication
-@FlywayDataSource
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

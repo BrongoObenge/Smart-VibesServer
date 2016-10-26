@@ -8,4 +8,5 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface dbRepository extends
         CrudRepository<SendPayload, Long> {
+    SendPayload findById(Long id);
 }

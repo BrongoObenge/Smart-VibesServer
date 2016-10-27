@@ -29,8 +29,9 @@ public class Controller {
 
     @MessageMapping("/hello")
     @SendTo("/topic/greetings")
-    public String a(String message){
-        return "your message: "+message;
+    public String greeting() throws Exception {
+        Thread.sleep(1000); // simulated delay
+        return "!";
     }
 
 }

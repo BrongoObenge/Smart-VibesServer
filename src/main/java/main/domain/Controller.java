@@ -96,14 +96,23 @@ public class Controller {
         return s;
     }
 
-    @RequestMapping(value="/debug/couple", method=RequestMethod.GET)
-    public ArrayList<Couple> debugCoupleList() throws Exception {
+    @RequestMapping(value="/debug", method=RequestMethod.GET)
+    public Object debugCoupleList() throws Exception {
         debugList(coupledList);
-        return coupledList;
+        debugListQueue(queue);
+        return coupledList + "\n\n" + queue;
     }
+
+
     private void debugList(ArrayList<Couple> a){
         for(Couple c: a){
             System.out.println("Couple: [addId:"+ c.getAppId()+"DeviceId:"+c.getDeviceId()+" connected:"+c.isConnected());
+        }
+    }
+
+    private void debugListQueue(ArrayList<Command> a){
+        for(Command c: a){
+            System.out.println(c.toString());
         }
     }
 

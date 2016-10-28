@@ -1,9 +1,12 @@
 package main.domain;
 
+import lombok.Data;
+
 /**
  * Created by j on 10/26/16.
  */
+@Data
 public class SendPayload {
-    private String sender;
-    private String receiver;
+    private String deviceId;
+    private String command;
 }

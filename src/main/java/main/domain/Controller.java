@@ -18,8 +18,8 @@ public class Controller {
     public String send(@RequestBody String body) throws Exception {
         if(body.startsWith("%7B")){
             String temp = URLDecoder.decode(body, "UTF-8");
-            if(temp.charAt(temp.length()-1) == '='){
-                body = temp.substring(0,temp.length() - 2);
+            if(temp.endsWith("=")){
+                body = temp.substring(0,temp.length() - 1);
             }
         }
         System.out.println(body);

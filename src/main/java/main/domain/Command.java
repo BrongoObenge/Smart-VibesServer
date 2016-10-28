@@ -2,6 +2,7 @@ package main.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @ToString
 @Entity
+@NoArgsConstructor
 public class Command {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)

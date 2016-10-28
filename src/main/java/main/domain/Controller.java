@@ -51,11 +51,9 @@ public class Controller {
     public String coupleDevice(@RequestBody String body) throws Exception {
         body = checkBody(body);
         CoupleRequest req = g.fromJson(body, CoupleRequest.class);
-        boolean action = false;
         for(Couple c: coupledList){
             if(c.getDeviceId().equals(req.getDeviceId())){
                 c.setConnected(true);
-                action = true;
                 return "{\"status\":\"Established connection.\"}";
             }
         }

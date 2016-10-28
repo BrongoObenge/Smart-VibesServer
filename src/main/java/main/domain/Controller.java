@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by j on 10/26/16.
@@ -19,6 +20,11 @@ public class Controller {
     private ArrayList<Couple> coupledList = new ArrayList<Couple>();
     private ArrayList<Command> queue = new ArrayList<Command>();
     private Gson g = new Gson();
+
+    @RequestMapping(value="/", method=RequestMethod.GET)
+    public String test() throws Exception {
+        return "{\"status\":\"up\"}";
+    }
 
     @RequestMapping(value="/send", method=RequestMethod.POST)
     public String send(@RequestBody String body) throws Exception {
@@ -34,6 +40,7 @@ public class Controller {
         RetrieveRequest req = g.fromJson(body, RetrieveRequest.class);
         for(Command c: queue){
             if(c.getDeviceId().equals(req.getDeviceId())){
+
                 return "{\"command\":\""+c.getCommand()+"\"}";
             }
         }
@@ -87,6 +94,17 @@ public class Controller {
             }
         }
         return s;
+    }
+
+    @RequestMapping(value="/debug/couple", method=RequestMethod.GET)
+    public ArrayList<Couple> debugCoupleList() throws Exception {
+        debugList(coupledList);
+        return coupledList;
+    }
+    private void debugList(ArrayList<Couple> a){
+        for(Couple c: a){
+            System.out.println("Couple: [addId:"+ c.getAppId()+"DeviceId:"+c.getDeviceId()+" connected:"+c.isConnected());
+        }
     }
 
 }

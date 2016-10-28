@@ -30,21 +30,23 @@ public class Controller {
     public String send(@RequestBody String body) throws Exception {
         body = checkBody(body);
         SendPayload p = g.fromJson(body, SendPayload.class);
+
         queue.add(new Command(p.getDeviceId(), null, p.getCommand()));
         return "{\"status\":\"Added Command to queue.\"}";
     }
 
     @RequestMapping(value="/retrieve", method=RequestMethod.POST)
     public String get(@RequestBody String body) throws Exception {
+        String returnCommand = "{\"command\":\"none\"}";
         body = checkBody(body);
         RetrieveRequest req = g.fromJson(body, RetrieveRequest.class);
         for(Command c: queue){
             if(c.getDeviceId().equals(req.getDeviceId())){
-
-                return "{\"command\":\""+c.getCommand()+"\"}";
+                returnCommand = "{\"command\":\""+c.getCommand()+"\"}";
+                queue.remove(c);
             }
         }
-        return "{\"command\":\"none\"}";
+        return returnCommand;
     }
 
     @RequestMapping(value="/couple/device", method=RequestMethod.POST)

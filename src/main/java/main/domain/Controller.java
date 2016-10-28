@@ -17,9 +17,13 @@ public class Controller {
     @RequestMapping(value="/send", method=RequestMethod.POST)
     public String send(@RequestBody String body) throws Exception {
         if(body.startsWith("%7B")){
-            System.out.println(URLDecoder.decode(body, "UTF-8"));
+            String temp = URLDecoder.decode(body, "UTF-8");
+            if(temp.charAt(temp.length()) == '='){
+                body = temp.substring(0,temp.length() - 1);
+            }
         }
         System.out.println(body);
+
         return "ABC";
     }
 

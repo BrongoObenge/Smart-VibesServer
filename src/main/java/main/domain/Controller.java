@@ -1,6 +1,8 @@
 package main.domain;
 
 import com.google.gson.Gson;
+import main.db.CommandService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,15 +13,14 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by j on 10/26/16.
- */
 
 @RestController
 public class Controller {
     private ArrayList<Couple> coupledList = new ArrayList<Couple>();
     private ArrayList<Command> queue = new ArrayList<Command>();
     private Gson g = new Gson();
+    @Autowired
+    CommandService service;
 
     @RequestMapping(value="/", method=RequestMethod.GET)
     public String test() throws Exception {
@@ -30,23 +31,20 @@ public class Controller {
     public String send(@RequestBody String body) throws Exception {
         body = checkBody(body);
         SendPayload p = g.fromJson(body, SendPayload.class);
-
-        queue.add(new Command(p.getDeviceId(), null, p.getCommand()));
+        service.save(new Command(1l, p.getDeviceId(), null, p.getCommand()));
         return "{\"status\":\"Added Command to queue.\"}";
     }
 
     @RequestMapping(value="/retrieve", method=RequestMethod.POST)
     public String get(@RequestBody String body) throws Exception {
-        String returnCommand = "{\"command\":\"none\"}";
         body = checkBody(body);
         RetrieveRequest req = g.fromJson(body, RetrieveRequest.class);
-        for(Command c: queue){
-            if(c.getDeviceId().equals(req.getDeviceId())){
-                returnCommand = "{\"command\":\""+c.getCommand()+"\"}";
-                queue.remove(c);
-            }
+        Command c = service.findByDeviceId(req.getDeviceId());
+        if (c!=null){
+            return "{\"command\":\""+c.getCommand()+"\"}";
+        }else{
+            return "{\"command\":\"none\"}";
         }
-        return returnCommand;
     }
 
     @RequestMapping(value="/couple/device", method=RequestMethod.POST)
